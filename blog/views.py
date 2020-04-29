@@ -1,9 +1,15 @@
+from django.shortcuts import render
 from django.utils import timezone
 from django.shortcuts import render, get_object_or_404
 from .models import Post
 from . import urls
 from .forms import PostForm
 from django.shortcuts import redirect
+
+from django.http import HttpResponseRedirect
+from .forms import NameForm
+from .models import Name
+
 
 def post_list(request):
     posts = Post.objects.filter(
@@ -40,3 +46,24 @@ def post_edit(request, pk):
     else:
         form = PostForm(instance=post)
     return render(request, 'blog/post_edit.html', {'form': form})
+
+
+
+def get_name(request):
+
+    if request.method == 'POST':
+
+        form = NameForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+
+            return HttpResponseRedirect(request.path_info)
+
+    else:
+  
+        form = NameForm()
+
+        names = Name.objects.all()
+
+    return render(request, 'name.html', {'form': form, 'names': names})
