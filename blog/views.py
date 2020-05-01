@@ -11,6 +11,10 @@ from .forms import NameForm
 from .models import Name
 
 
+from .models import Comment 
+from .forms import CommentForm
+
+
 def post_list(request):
     posts = Post.objects.filter(
         published_date__lte=timezone.now()).order_by('published_date')
@@ -52,18 +56,23 @@ def post_edit(request, pk):
 def get_name(request):
 
     if request.method == 'POST':
-
         form = NameForm(request.POST)
-
         if form.is_valid():
             form.save()
-
             return HttpResponseRedirect(request.path_info)
 
     else:
-  
         form = NameForm()
-
         names = Name.objects.all()
-
     return render(request, 'name.html', {'form': form, 'names': names})
+
+
+
+
+
+
+
+
+
+
+
